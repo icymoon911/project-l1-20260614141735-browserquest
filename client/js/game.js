@@ -1904,7 +1904,9 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
          */
         click: function() {
             var pos = this.getMouseGridPosition(),
-                entity;
+                entity,
+                hoveringCollidingTile,
+                hoveringPlateauTile;
             
             if(pos.x === this.previousClickPosition.x
             && pos.y === this.previousClickPosition.y) {
@@ -1912,14 +1914,22 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
             } else {
                 this.previousClickPosition = pos;
             }
-	        
+
+            if(this.renderer.mobile || this.renderer.tablet) {
+                hoveringCollidingTile = this.map.isColliding(pos.x, pos.y);
+                hoveringPlateauTile = this.player.isOnPlateau ? !this.map.isPlateau(pos.x, pos.y) : this.map.isPlateau(pos.x, pos.y);
+            } else {
+                hoveringCollidingTile = this.hoveringCollidingTile;
+                hoveringPlateauTile = this.hoveringPlateauTile;
+            }
+
     	    if(this.started
     	    && this.player
     	    && !this.isZoning()
     	    && !this.isZoningTile(this.player.nextGridX, this.player.nextGridY)
     	    && !this.player.isDead
-    	    && !this.hoveringCollidingTile
-    	    && !this.hoveringPlateauTile) {
+    	    && !hoveringCollidingTile
+    	    && !hoveringPlateauTile) {
         	    entity = this.getEntityAt(pos.x, pos.y);
     	    
         	    if(entity instanceof Mob) {

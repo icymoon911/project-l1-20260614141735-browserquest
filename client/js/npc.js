@@ -82,20 +82,25 @@ define(['character'], function(Character) {
         ],
         
         "beachnpc": [
-            "lorem ipsum dolor sit amet",
-            "consectetur adipisicing elit, sed do eiusmod tempor"
+            "Don't mind me, I'm just here on vacation.",
+            "I have to say...",
+            "These giant crabs are somewhat annoying.",
+            "Could you please get rid of them for me?"
         ],
-        
+
         "forestnpc": [
             "lorem ipsum dolor sit amet",
             "consectetur adipisicing elit, sed do eiusmod tempor"
         ],
-        
+
         "desertnpc": [
-            "lorem ipsum dolor sit amet",
-            "consectetur adipisicing elit, sed do eiusmod tempor"
+            "One does not simply walk into these mountains...",
+            "An ancient undead lord is said to dwell here.",
+            "Nobody knows exactly what he looks like...",
+            "...for none has lived to tell the tale.",
+            "It's not too late to turn around and go home, kid."
         ],
-        
+
         "lavanpc": [
             "lorem ipsum dolor sit amet",
             "consectetur adipisicing elit, sed do eiusmod tempor"
@@ -139,22 +144,7 @@ define(['character'], function(Character) {
             "That's the beauty of HTML5!",
             "Give it a try..."
         ],
-    
-        "beachnpc": [
-            "Don't mind me, I'm just here on vacation.",
-            "I have to say...",
-            "These giant crabs are somewhat annoying.",
-            "Could you please get rid of them for me?"
-        ],
-        
-        "desertnpc": [
-            "One does not simply walk into these mountains...",
-            "An ancient undead lord is said to dwell here.",
-            "Nobody knows exactly what he looks like...",
-            "...for none has lived to tell the tale.",
-            "It's not too late to turn around and go home, kid."
-        ],
-    
+
         "othernpc": [
             "lorem ipsum",
             "lorem ipsum"
