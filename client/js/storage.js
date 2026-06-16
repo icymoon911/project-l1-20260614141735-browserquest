@@ -103,64 +103,63 @@ define(function() {
             return _.size(this.data.achievements.unlocked);
         },
     
+        // ── Generic counter helper ──────────────────────────────────
+        // Consolidates the repeated check-cap → increment → save pattern
+        // used by all achievement counters.
+        //
+        // @param {String} key    Property name inside this.data.achievements
+        // @param {Number} max    Upper bound (counter stops incrementing past this)
+        // @param {Number} amount Value to add (defaults to 1)
+        incrementCounter: function(key, max, amount) {
+            if(this.data.achievements[key] < max) {
+                this.data.achievements[key] += (amount !== undefined ? amount : 1);
+                this.save();
+            }
+        },
+
         // Angry rats
         getRatCount: function() {
             return this.data.achievements.ratCount;
         },
-    
+
         incrementRatCount: function() {
-            if(this.data.achievements.ratCount < 10) {
-                this.data.achievements.ratCount++;
-                this.save();
-            }
+            this.incrementCounter('ratCount', 10);
         },
-        
+
         // Skull Collector
         getSkeletonCount: function() {
             return this.data.achievements.skeletonCount;
         },
 
         incrementSkeletonCount: function() {
-            if(this.data.achievements.skeletonCount < 10) {
-                this.data.achievements.skeletonCount++;
-                this.save();
-            }
+            this.incrementCounter('skeletonCount', 10);
         },
-    
+
         // Meatshield
         getTotalDamageTaken: function() {
             return this.data.achievements.totalDmg;
         },
-    
+
         addDamage: function(damage) {
-            if(this.data.achievements.totalDmg < 5000) {
-                this.data.achievements.totalDmg += damage;
-                this.save();
-            }
+            this.incrementCounter('totalDmg', 5000, damage);
         },
-        
+
         // Hunter
         getTotalKills: function() {
             return this.data.achievements.totalKills;
         },
 
         incrementTotalKills: function() {
-            if(this.data.achievements.totalKills < 50) {
-                this.data.achievements.totalKills++;
-                this.save();
-            }
+            this.incrementCounter('totalKills', 50);
         },
-    
+
         // Still Alive
         getTotalRevives: function() {
             return this.data.achievements.totalRevives;
         },
-    
+
         incrementRevives: function() {
-            if(this.data.achievements.totalRevives < 5) {
-                this.data.achievements.totalRevives++;
-                this.save();
-            }
+            this.incrementCounter('totalRevives', 5);
         },
     });
     
