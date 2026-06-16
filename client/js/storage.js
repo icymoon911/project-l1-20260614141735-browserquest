@@ -1,6 +1,16 @@
 
 define(function() {
 
+    // Counter configuration: each key maps to its max value.
+    // To add a new counter, simply add an entry here.
+    var COUNTER_CONFIG = {
+        ratCount:      { max: 10 },
+        skeletonCount: { max: 10 },
+        totalKills:    { max: 50 },
+        totalDmg:      { max: 5000 },
+        totalRevives:  { max: 5 }
+    };
+
     var Storage = Class.extend({
         init: function() {
             if(this.hasLocalStorage() && localStorage.data) {
@@ -9,7 +19,7 @@ define(function() {
                 this.resetData();
             }
         },
-    
+
         resetData: function() {
             this.data = {
                 hasAlreadyPlayed: false,
@@ -29,40 +39,40 @@ define(function() {
                 }
             };
         },
-    
+
         hasLocalStorage: function() {
             return Modernizr.localstorage;
         },
-    
+
         save: function() {
             if(this.hasLocalStorage()) {
                 localStorage.data = JSON.stringify(this.data);
             }
         },
-    
+
         clear: function() {
             if(this.hasLocalStorage()) {
                 localStorage.data = "";
                 this.resetData();
             }
         },
-    
+
         // Player
-    
+
         hasAlreadyPlayed: function() {
             return this.data.hasAlreadyPlayed;
         },
-    
+
         initPlayer: function(name) {
             this.data.hasAlreadyPlayed = true;
             this.setPlayerName(name);
         },
-        
+
         setPlayerName: function(name) {
             this.data.player.name = name;
             this.save();
         },
-    
+
         setPlayerImage: function(img) {
             this.data.player.image = img;
             this.save();
@@ -72,7 +82,7 @@ define(function() {
             this.data.player.armor = armor;
             this.save();
         },
-    
+
         setPlayerWeapon: function(weapon) {
             this.data.player.weapon = weapon;
             this.save();
@@ -83,13 +93,13 @@ define(function() {
             this.setPlayerArmor(armor);
             this.setPlayerWeapon(weapon);
         },
-    
+
         // Achievements
-    
+
         hasUnlockedAchievement: function(id) {
             return _.include(this.data.achievements.unlocked, id);
         },
-    
+
         unlockAchievement: function(id) {
             if(!this.hasUnlockedAchievement(id)) {
                 this.data.achievements.unlocked.push(id);
@@ -98,71 +108,76 @@ define(function() {
             }
             return false;
         },
-    
+
         getAchievementCount: function() {
             return _.size(this.data.achievements.unlocked);
         },
-    
-        // Angry rats
-        getRatCount: function() {
-            return this.data.achievements.ratCount;
+
+        // Generic counter methods — all achievement counters share this logic.
+        // To add a new counter, add an entry to COUNTER_CONFIG above.
+
+        getCounter: function(key) {
+            return this.data.achievements[key] || 0;
         },
-    
-        incrementRatCount: function() {
-            if(this.data.achievements.ratCount < 10) {
-                this.data.achievements.ratCount++;
-                this.save();
+
+        incrementCounter: function(key, amount) {
+            var config = COUNTER_CONFIG[key];
+            if(config) {
+                var current = this.data.achievements[key];
+                if(current < config.max) {
+                    this.data.achievements[key] += (amount !== undefined ? amount : 1);
+                    this.save();
+                }
             }
         },
-        
+
+        // Named accessors — thin wrappers over the generic counter methods.
+
+        // Angry rats
+        getRatCount: function() {
+            return this.getCounter('ratCount');
+        },
+
+        incrementRatCount: function() {
+            this.incrementCounter('ratCount');
+        },
+
         // Skull Collector
         getSkeletonCount: function() {
-            return this.data.achievements.skeletonCount;
+            return this.getCounter('skeletonCount');
         },
 
         incrementSkeletonCount: function() {
-            if(this.data.achievements.skeletonCount < 10) {
-                this.data.achievements.skeletonCount++;
-                this.save();
-            }
+            this.incrementCounter('skeletonCount');
         },
-    
+
         // Meatshield
         getTotalDamageTaken: function() {
-            return this.data.achievements.totalDmg;
+            return this.getCounter('totalDmg');
         },
-    
+
         addDamage: function(damage) {
-            if(this.data.achievements.totalDmg < 5000) {
-                this.data.achievements.totalDmg += damage;
-                this.save();
-            }
+            this.incrementCounter('totalDmg', damage);
         },
-        
+
         // Hunter
         getTotalKills: function() {
-            return this.data.achievements.totalKills;
+            return this.getCounter('totalKills');
         },
 
         incrementTotalKills: function() {
-            if(this.data.achievements.totalKills < 50) {
-                this.data.achievements.totalKills++;
-                this.save();
-            }
+            this.incrementCounter('totalKills');
         },
-    
+
         // Still Alive
         getTotalRevives: function() {
-            return this.data.achievements.totalRevives;
+            return this.getCounter('totalRevives');
         },
-    
+
         incrementRevives: function() {
-            if(this.data.achievements.totalRevives < 5) {
-                this.data.achievements.totalRevives++;
-                this.save();
-            }
-        },
+            this.incrementCounter('totalRevives');
+        }
     });
-    
+
     return Storage;
 });
