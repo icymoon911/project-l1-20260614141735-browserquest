@@ -1230,3 +1230,114 @@ footer, header, hgroup, menu, nav, section {
     .opera #achievements.active, .opera #instructions.active { z-index: 30000;}
     .opera #coinsparks {display:none;}
     .opera #death, .opera #about, .opera #credits, .opera #error, .opera #confirmation, .opera #loadcharacter { z-index: -30000; }
+
+/* ===== MINIMAP ===== */
+
+    #minimap-container {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        z-index: 50;
+        border-radius: 3px;
+        overflow: hidden;
+        box-shadow: 0 0 6px rgba(0,0,0,0.7), inset 0 0 2px rgba(0,0,0,0.5);
+        border: 1px solid rgba(80,120,160,0.4);
+        pointer-events: auto;
+        cursor: pointer;
+        opacity: 0.88;
+        -moz-transition: opacity 0.2s ease;
+        -webkit-transition: opacity 0.2s ease;
+        -o-transition: opacity 0.2s ease;
+        transition: opacity 0.2s ease;
+    }
+
+    #minimap-container:hover {
+        opacity: 1;
+        box-shadow: 0 0 8px rgba(0,0,0,0.85), inset 0 0 2px rgba(0,0,0,0.5), 0 0 4px rgba(80,150,220,0.3);
+    }
+
+    #minimap-canvas {
+        display: block;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: pixelated;
+    }
+
+    #minimap-toggle {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 18px;
+        height: 18px;
+        background: rgba(0,0,0,0.55);
+        border-radius: 2px;
+        font-size: 11px;
+        line-height: 18px;
+        text-align: center;
+        color: rgba(255,255,255,0.7);
+        cursor: pointer;
+        z-index: 51;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        font-family: sans-serif;
+    }
+
+    #minimap-toggle:hover {
+        background: rgba(30,60,90,0.75);
+        color: rgba(255,255,255,1);
+    }
+
+    /* Minimap legend tooltip */
+    #minimap-container::after {
+        content: 'Player●  Mob●  NPC●  Chest●  [M] toggle';
+        position: absolute;
+        bottom: calc(100% + 4px);
+        right: 0;
+        background: rgba(10,15,25,0.92);
+        color: rgba(200,210,220,0.9);
+        font-size: 10px;
+        font-family: 'GraphicPixel', monospace;
+        padding: 4px 8px;
+        border-radius: 3px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        -moz-transition: opacity 0.15s;
+        -webkit-transition: opacity 0.15s;
+        transition: opacity 0.15s;
+        border: 1px solid rgba(80,120,160,0.3);
+    }
+
+    #minimap-container:hover::after {
+        opacity: 1;
+    }
+
+    /* Responsive: smaller minimap on mobile */
+    @media screen and (max-width: 1000px) {
+        #minimap-container {
+            bottom: 4px;
+            right: 4px;
+            border: 1px solid rgba(80,120,160,0.25);
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
+            opacity: 0.8;
+        }
+
+        #minimap-container::after {
+            display: none;
+        }
+
+        #minimap-toggle {
+            width: 14px;
+            height: 14px;
+            font-size: 9px;
+            line-height: 14px;
+        }
+    }
+
+    /* Hide minimap entirely on very small screens */
+    @media screen and (max-width: 480px) {
+        #minimap-container {
+            display: none !important;
+        }
+    }

@@ -1,10 +1,10 @@
 
 define(['infomanager', 'bubble', 'renderer', 'map', 'animation', 'sprite', 'tile',
         'warrior', 'gameclient', 'audio', 'updater', 'transition', 'pathfinder',
-        'item', 'mob', 'npc', 'player', 'character', 'chest', 'mobs', 'exceptions', 'config', '../../shared/js/gametypes'],
+        'item', 'mob', 'npc', 'player', 'character', 'chest', 'mobs', 'exceptions', 'config', 'minimap', '../../shared/js/gametypes'],
 function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedTile,
          Warrior, GameClient, AudioManager, Updater, Transition, Pathfinder,
-         Item, Mob, Npc, Player, Character, Chest, Mobs, Exceptions, config) {
+         Item, Mob, Npc, Player, Character, Chest, Mobs, Exceptions, config, Minimap) {
     
     var Game = Class.extend({
         init: function(app) {
@@ -664,7 +664,10 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
             
                     self.initPlayer();
                     self.setCursor("hand");
-                    
+
+                    // Initialize the minimap
+                    self.minimap = new Minimap(self);
+
                     self.connect(started_callback);
                 
                     clearInterval(wait);
@@ -679,6 +682,10 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
                 this.updateCursorLogic();
                 this.updater.update();
                 this.renderer.renderFrame();
+
+                if(this.minimap) {
+                    this.minimap.update();
+                }
             }
 
             if(!this.isStopped) {
@@ -2294,12 +2301,16 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
                 y = this.camera.y,
                 currentScale = this.renderer.scale,
                 newScale = this.renderer.getScaleFactor();
-    
+
                 this.renderer.rescale(newScale);
                 this.camera = this.renderer.camera;
                 this.camera.setPosition(x, y);
 
                 this.renderer.renderStaticCanvases();
+
+                if(this.minimap) {
+                    this.minimap.onResize();
+                }
         },
     
         updateBars: function() {

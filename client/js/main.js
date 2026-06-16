@@ -391,6 +391,12 @@ define(['jquery', 'app'], function($, App) {
                         // game.player.hit();
                         return false;
                     }
+                    if(key === 77) { // M - toggle minimap
+                        if(game.minimap) {
+                            game.minimap.toggle();
+                        }
+                        return false;
+                    }
                 } else {
                     if(key === 13 && game.ready) {
                         $chat.focus();
