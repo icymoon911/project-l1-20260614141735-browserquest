@@ -1,5 +1,5 @@
 
-define(['camera', 'item', 'character', 'player', 'timer'], 
+define(['camera', 'item', 'character', 'player', 'timer'],
 function(Camera, Item, Character, Player, Timer) {
 
     var Renderer = Class.extend({
@@ -33,6 +33,12 @@ function(Camera, Item, Character, Player, Timer) {
             this.tablet = Detect.isTablet(window.innerWidth);
             
             this.fixFlickeringTimer = new Timer(100);
+
+            this.minimap = null;
+        },
+
+        setMinimap: function(minimap) {
+            this.minimap = minimap;
         },
     
         getWidth: function() {
@@ -723,6 +729,11 @@ function(Camera, Item, Character, Player, Timer) {
             }
             else {
                 this.renderFrameDesktop();
+            }
+
+            // Draw minimap overlay
+            if(this.minimap) {
+                this.minimap.draw();
             }
         },
     

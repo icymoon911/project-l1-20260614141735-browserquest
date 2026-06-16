@@ -165,8 +165,8 @@ define(['jquery', 'app'], function($, App) {
     };
     
     var initGame = function() {
-        require(['game'], function(Game) {
-            
+        require(['game', 'minimap'], function(Game, Minimap) {
+
             var canvas = document.getElementById("entities"),
         	    background = document.getElementById("background"),
         	    foreground = document.getElementById("foreground"),
@@ -176,6 +176,11 @@ define(['jquery', 'app'], function($, App) {
     		game.setup('#bubbles', canvas, background, foreground, input);
     		game.setStorage(app.storage);
     		app.setGame(game);
+
+            // Initialize minimap
+            var minimap = new Minimap(game, 'minimap');
+            game.renderer.setMinimap(minimap);
+            game.minimap = minimap;
     		
     		if(app.isDesktop && app.supportsWorkers) {
     		    game.loadMap();
@@ -360,6 +365,22 @@ define(['jquery', 'app'], function($, App) {
             $('#mutebutton').click(function() {
                 game.audioManager.toggle();
             });
+
+            // Minimap toggle button
+            $('#minimap-toggle').click(function(e) {
+                e.stopPropagation();
+                if (game.minimap) {
+                    game.minimap.toggle();
+                    $('#minimap-container').toggleClass('hidden');
+                }
+            });
+
+            // Minimap resize on window resize
+            $(window).resize(function() {
+                if (game.minimap) {
+                    game.minimap._resize();
+                }
+            });
             
             $(document).bind("keydown", function(e) {
             	var key = e.which,
@@ -389,6 +410,13 @@ define(['jquery', 'app'], function($, App) {
                     }
                     if(key === 65) { // a
                         // game.player.hit();
+                        return false;
+                    }
+                    if(key === 77) { // M - toggle minimap
+                        if(game.minimap) {
+                            game.minimap.toggle();
+                            $('#minimap-container').toggleClass('hidden');
+                        }
                         return false;
                     }
                 } else {

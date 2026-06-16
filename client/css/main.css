@@ -1230,3 +1230,104 @@ footer, header, hgroup, menu, nav, section {
     .opera #achievements.active, .opera #instructions.active { z-index: 30000;}
     .opera #coinsparks {display:none;}
     .opera #death, .opera #about, .opera #credits, .opera #error, .opera #confirmation, .opera #loadcharacter { z-index: -30000; }
+
+/* Minimap styles */
+
+    #minimap-container {
+        position: absolute;
+        bottom: 50px;
+        right: 10px;
+        z-index: 100;
+        pointer-events: auto;
+    }
+
+    #canvasborder {
+        position: relative;
+    }
+
+    #minimap {
+        display: block;
+        border: 2px solid #555577;
+        border-radius: 4px;
+        background: #1a1a2e;
+        cursor: crosshair;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        opacity: 0.85;
+        -webkit-transition: opacity 0.2s;
+        -moz-transition: opacity 0.2s;
+        transition: opacity 0.2s;
+    }
+
+    #minimap:hover {
+        opacity: 1.0;
+    }
+
+    #minimap-toggle {
+        position: absolute;
+        top: -20px;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        background: rgba(50,50,80,0.8);
+        border: 1px solid #555577;
+        border-radius: 3px;
+        cursor: pointer;
+        text-align: center;
+        line-height: 20px;
+        font-size: 12px;
+        color: #aaa;
+    }
+
+    #minimap-toggle:hover {
+        background: rgba(80,80,120,0.9);
+        color: #fff;
+    }
+
+    #minimap-toggle::after {
+        content: "M";
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    #minimap-container.hidden #minimap {
+        display: none;
+    }
+
+    #minimap-container.hidden #minimap-toggle {
+        opacity: 0.5;
+    }
+
+    #minimap-container.hidden #minimap-toggle::after {
+        content: "M";
+    }
+
+    /* Responsive: mobile */
+    @media screen and (max-width: 600px) {
+        #minimap-container {
+            bottom: 40px;
+            right: 5px;
+        }
+        #minimap {
+            width: 120px;
+            height: 90px;
+        }
+        #minimap-toggle {
+            width: 16px;
+            height: 16px;
+            top: -16px;
+            font-size: 10px;
+            line-height: 16px;
+        }
+    }
+
+    /* Responsive: tablet */
+    @media screen and (min-width: 601px) and (max-width: 1000px) {
+        #minimap-container {
+            bottom: 45px;
+            right: 8px;
+        }
+        #minimap {
+            width: 150px;
+            height: 112px;
+        }
+    }
