@@ -1904,22 +1904,34 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
          */
         click: function() {
             var pos = this.getMouseGridPosition(),
-                entity;
-            
+                entity,
+                collidingTile,
+                plateauTile;
+
             if(pos.x === this.previousClickPosition.x
             && pos.y === this.previousClickPosition.y) {
                 return;
             } else {
                 this.previousClickPosition = pos;
             }
-	        
+
+            // On mobile/tablet, movecursor() does not set hoveringCollidingTile/hoveringPlateauTile,
+            // so compute them directly here.
+            if(this.renderer.mobile || this.renderer.tablet) {
+                collidingTile = this.map.isColliding(pos.x, pos.y);
+                plateauTile = this.player.isOnPlateau ? !this.map.isPlateau(pos.x, pos.y) : this.map.isPlateau(pos.x, pos.y);
+            } else {
+                collidingTile = this.hoveringCollidingTile;
+                plateauTile = this.hoveringPlateauTile;
+            }
+
     	    if(this.started
     	    && this.player
     	    && !this.isZoning()
     	    && !this.isZoningTile(this.player.nextGridX, this.player.nextGridY)
     	    && !this.player.isDead
-    	    && !this.hoveringCollidingTile
-    	    && !this.hoveringPlateauTile) {
+    	    && !collidingTile
+    	    && !plateauTile) {
         	    entity = this.getEntityAt(pos.x, pos.y);
     	    
         	    if(entity instanceof Mob) {

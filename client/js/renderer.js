@@ -16,7 +16,9 @@ function(Camera, Item, Character, Player, Timer) {
             this.initFPS();
             this.tilesize = 16;
         
-            this.upscaledRendering = this.context.mozImageSmoothingEnabled !== undefined;
+            this.upscaledRendering = this.context.mozImageSmoothingEnabled !== undefined
+                                     || this.context.webkitImageSmoothingEnabled !== undefined
+                                     || this.context.imageSmoothingEnabled !== undefined;
             this.supportsSilhouettes = this.upscaledRendering;
         
             this.rescale(this.getScaleFactor());
@@ -73,9 +75,9 @@ function(Camera, Item, Character, Player, Timer) {
         
             this.createCamera();
         
-            this.context.mozImageSmoothingEnabled = false;
-            this.background.mozImageSmoothingEnabled = false;
-            this.foreground.mozImageSmoothingEnabled = false;
+            this.disableImageSmoothing(this.context);
+            this.disableImageSmoothing(this.background);
+            this.disableImageSmoothing(this.foreground);
         
             this.initFont();
             this.initFPS();
@@ -85,6 +87,16 @@ function(Camera, Item, Character, Player, Timer) {
             }
             if(this.game.renderer) {
                 this.game.setSpriteScale(this.scale);
+            }
+        },
+
+        disableImageSmoothing: function(ctx) {
+            if(ctx.mozImageSmoothingEnabled !== undefined) {
+                ctx.mozImageSmoothingEnabled = false;
+            } else if(ctx.webkitImageSmoothingEnabled !== undefined) {
+                ctx.webkitImageSmoothingEnabled = false;
+            } else {
+                ctx.imageSmoothingEnabled = false;
             }
         },
 

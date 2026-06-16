@@ -133,6 +133,9 @@ define(function() {
         },
     
         addDamage: function(damage) {
+            if(damage <= 0) {
+                return;
+            }
             if(this.data.achievements.totalDmg < 5000) {
                 this.data.achievements.totalDmg += damage;
                 this.save();
